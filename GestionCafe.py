@@ -1,3 +1,5 @@
+import re
+
 class Cafe:
     def __init__(self, entrada):
         self.entrada = entrada
@@ -9,23 +11,44 @@ class Cafe:
         if len(partes) < 2:
             print("No ingresó los valores adecuados")
             return False
+
         self.nombre, tamanos_str = partes[0], partes[1:]
-        if not self.nombre.isalpha() or not (2 <= len(self.nombre) <= 15):
-            print("El nombre es inválido, solo caracteres alfanuméricos, y nombre de 2 a 15 letras")
+
+        if not re.match("^[A-Za-z]+$", self.nombre):
+            print("El nombre es inválido, debe contener solo caracteres alfabéticos sin caracteres especiales")
             return False
+
+        if not (2 <= len(self.nombre) <= 15):
+            print("La longitud del nombre debe ser de 2 a 15 caracteres")
+            return False
+
         try:
-            self.tamanos = [int(tamano) for tamano in tamanos_str]
+            tamanos = [int(tamano) for tamano in tamanos_str]
         except ValueError:
-            print("El tamaño no es válido, ingrese un número")
+            print("Uno o más tamaños especificados no son números válidos")
             return False
-        if not (1 <= len(self.tamanos) <= 5) or not all(1 <= tam <= 48 for tam in self.tamanos):
-            print("El tamaño está entre números menores a 1 o mayores a 48 o ingresó más de 5")
+
+        if len(tamanos) != len(set(tamanos)):
+            print("Los tamaños no deben repetirse")
             return False
-        if self.tamanos != sorted(self.tamanos):
-            print("Los tamaños no están en orden ascendente")
+
+        # Asegúrate de asignar tamanos a self.tamanos antes de la verificación de orden
+        self.tamanos = tamanos
+
+        if not (self.tamanos == sorted(self.tamanos)):
+            print("Los tamaños deben estar en orden ascendente")
+            return False
+
+        if not (1 <= len(self.tamanos) <= 5):
+            print("Debe ingresar entre 1 y 5 tamaños")
+            return False
+
+        if not all(1 <= tam <= 48 for tam in self.tamanos):
+            print("Todos los tamaños deben estar en el rango de 1 a 48")
             return False
 
         return True
+
 
 def ValidarBebida(entrada):
     bebida = Cafe(entrada)
