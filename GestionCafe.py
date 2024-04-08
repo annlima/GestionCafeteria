@@ -31,8 +31,7 @@ class Cafe:
         if len(tamanos) != len(set(tamanos)):
             print("Los tamaños no deben repetirse")
             return False
-
-        # Asegúrate de asignar tamanos a self.tamanos antes de la verificación de orden
+            
         self.tamanos = tamanos
 
         if not (self.tamanos == sorted(self.tamanos)):
